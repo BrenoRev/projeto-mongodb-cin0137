@@ -1,0 +1,115 @@
+
+==============================================================================
+J01 | Quais viagens têm mais passageiros confirmados do que vagas ofertadas?
+Itens da checklist: EXPR, FUNCTION, FIND, SORT
+Outros recursos: $where
+==============================================================================
+{
+  _id: 'T0016',
+  motorista_id: 'U014',
+  veiculo_id: 'V017',
+  vagas_ofertadas: 2,
+  passageiros: [
+    { usuario_id: 'U012', status: 'confirmado' },
+    { usuario_id: 'U007', status: 'confirmado' },
+    { usuario_id: 'U027', status: 'confirmado' }
+  ]
+}
+{
+  _id: 'T0048',
+  motorista_id: 'U003',
+  veiculo_id: 'V005',
+  vagas_ofertadas: 2,
+  passageiros: [
+    { usuario_id: 'U024', status: 'confirmado' },
+    { usuario_id: 'U018', status: 'confirmado' },
+    { usuario_id: 'U001', status: 'confirmado' }
+  ]
+}
+Total retornado: 2
+Mesma auditoria com $expr (sem JavaScript): 2 viagem(ns)
+
+==============================================================================
+J02 | Quantos km foram rodados no total a partir de cada cidade de origem?
+Itens da checklist: FUNCTION
+Outros recursos: mapReduce
+==============================================================================
+DeprecationWarning: Collection.mapReduce() is deprecated. Use an aggregation instead.
+See https://mongodb.com/docs/manual/core/map-reduce for details.
+{ _id: 'Recife', value: { km: 1541, viagens: 26, km_medio: 59.3 } }
+{ _id: 'Olinda', value: { km: 797, viagens: 11, km_medio: 72.5 } }
+{ _id: 'Caruaru', value: { km: 555, viagens: 6, km_medio: 92.5 } }
+{ _id: 'Gravatá', value: { km: 425, viagens: 5, km_medio: 85 } }
+{ _id: 'Camaragibe', value: { km: 298, viagens: 5, km_medio: 59.6 } }
+{ _id: 'Paulista', value: { km: 187, viagens: 4, km_medio: 46.8 } }
+{
+  _id: 'Jaboatão dos Guararapes',
+  value: { km: 54, viagens: 3, km_medio: 18 }
+}
+Total retornado: 7
+
+==============================================================================
+J03 | Qual a pontuação verde de cada motorista (CO2, ocupação e bônus para elétrico)?
+Itens da checklist: AGGREGATE, FUNCTION, LOOKUP, GROUP, AVG, SUM, COND, SORT, LIMIT
+==============================================================================
+{
+  motorista_id: 'U010',
+  nome: 'João Victor Albuquerque',
+  pontuacao_verde: 232.2,
+  co2_kg: 174.12,
+  ocupacao_media: 0.83,
+  viagens: 6,
+  viagens_eletricas: 0
+}
+{
+  motorista_id: 'U006',
+  nome: 'Felipe Cavalcanti Rocha',
+  pontuacao_verde: 214,
+  co2_kg: 158.52,
+  ocupacao_media: 0.85,
+  viagens: 5,
+  viagens_eletricas: 0
+}
+{
+  motorista_id: 'U002',
+  nome: 'Bruno Henrique Santos',
+  pontuacao_verde: 143.6,
+  co2_kg: 106.08,
+  ocupacao_media: 0.85,
+  viagens: 4,
+  viagens_eletricas: 0
+}
+{
+  motorista_id: 'U007',
+  nome: 'Gabriela Souza Pires',
+  pontuacao_verde: 140.8,
+  co2_kg: 90.36,
+  ocupacao_media: 0.92,
+  viagens: 4,
+  viagens_eletricas: 2
+}
+{
+  motorista_id: 'U004',
+  nome: 'Diego Ferreira Costa',
+  pontuacao_verde: 130.1,
+  co2_kg: 94.2,
+  ocupacao_media: 0.88,
+  viagens: 7,
+  viagens_eletricas: 0
+}
+Total retornado: 5
+
+==============================================================================
+J04 | Equivalente de J02 com aggregate, para comparar com o mapReduce
+Itens da checklist: AGGREGATE, MATCH, GROUP, SUM, AVG, SORT
+==============================================================================
+{ _id: 'Recife', km: 1541, viagens: 26, km_medio: 59.3 }
+{ _id: 'Olinda', km: 797, viagens: 11, km_medio: 72.5 }
+{ _id: 'Caruaru', km: 555, viagens: 6, km_medio: 92.5 }
+{ _id: 'Gravatá', km: 425, viagens: 5, km_medio: 85 }
+{ _id: 'Camaragibe', km: 298, viagens: 5, km_medio: 59.6 }
+{ _id: 'Paulista', km: 187, viagens: 4, km_medio: 46.8 }
+{ _id: 'Jaboatão dos Guararapes', km: 54, viagens: 3, km_medio: 18 }
+Total retornado: 7
+Cidades comparadas: 7 | divergências: 0
+J02 (mapReduce) e J04 (aggregate) batem: SIM

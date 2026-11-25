@@ -1,0 +1,112 @@
+
+==============================================================================
+I01 | Povoar as quatro coleções com insertMany
+Itens da checklist: nenhum (operação de apoio)
+Outros recursos: insertMany
+==============================================================================
+usuarios: 40 documentos inseridos (acknowledged: true)
+veiculos: 18 documentos inseridos (acknowledged: true)
+viagens: 80 documentos inseridos (acknowledged: true)
+avaliacoes: 120 documentos inseridos (acknowledged: true)
+
+==============================================================================
+I02 | Cadastrar uma nova passageira que acabou de criar conta
+Itens da checklist: INSERTONE
+==============================================================================
+{
+  acknowledged: true,
+  insertedId: 'U041'
+}
+{
+  _id: 'U041',
+  nome: 'Tatiana Rocha Guedes',
+  email: 'tatiana.guedes@email.com',
+  telefone: '81999990041',
+  endereco: { bairro: 'Casa Amarela', cidade: 'Recife', uf: 'PE' },
+  perfis: [ 'passageiro' ],
+  preferencias: [ 'silencio' ],
+  data_cadastro: ISODate('2026-11-19T14:30:00.000Z')
+}
+Total retornado: 1
+Segunda tentativa com o mesmo e-mail: recusada com código 11000
+E11000 duplicate key error collection: caronas_sustentaveis.usuarios index: idx_email_unico dup key: { email: "tatiana.guedes@email.com" }
+Usuários antes e depois da tentativa: 41 e 41
+
+==============================================================================
+RESUMO | Volumes inseridos por coleção e distribuição de status
+Itens da checklist: nenhum (operação de apoio)
+==============================================================================
+usuarios: 41
+veiculos: 18
+viagens: 80
+avaliacoes: 120
+viagens com status agendada: 12
+viagens com status cancelada: 8
+viagens com status concluida: 60
+
+==============================================================================
+EXEMPLOS | Um documento de cada coleção, como foi gravado
+Itens da checklist: nenhum (operação de apoio)
+==============================================================================
+usuarios:
+{
+  _id: 'U007',
+  nome: 'Gabriela Souza Pires',
+  email: 'gabriela.pires@email.com',
+  telefone: '81999990007',
+  endereco: { bairro: 'Centro', cidade: 'Gravatá', uf: 'PE' },
+  perfis: [ 'motorista', 'passageiro' ],
+  preferencias: [ 'bagagem grande', 'musica', 'sem fumo', 'pet friendly' ],
+  cnh_verificada: true,
+  data_cadastro: ISODate('2025-09-25T13:00:00.000Z')
+}
+veiculos:
+{
+  _id: 'V001',
+  motorista_id: 'U001',
+  marca: 'BYD',
+  modelo: 'Dolphin',
+  ano: 2024,
+  placa: 'PEX1A23',
+  capacidade: 4,
+  combustivel: 'eletrico',
+  eletrico: true
+}
+viagens:
+{
+  _id: 'T0001',
+  motorista_id: 'U003',
+  veiculo_id: 'V005',
+  origem: { cidade: 'Recife', bairro: 'Boa Vista' },
+  destino: { cidade: 'Cabo de Santo Agostinho', bairro: 'Gaibu' },
+  paradas: [ 'Jaboatão dos Guararapes' ],
+  data_hora: ISODate('2026-09-01T20:00:00.000Z'),
+  distancia_km: 38,
+  preco_assento: 14,
+  vagas_ofertadas: 4,
+  passageiros: [
+    { usuario_id: 'U001', status: 'confirmado', valor_pago: 14 },
+    {
+      usuario_id: 'U033',
+      status: 'confirmado',
+      valor_pago: 14,
+      cupom: 'SEMANADOMEIOAMBIENTE'
+    },
+    { usuario_id: 'U025', status: 'confirmado', valor_pago: 14 },
+    { usuario_id: 'U039', status: 'confirmado', valor_pago: 14 }
+  ],
+  status: 'concluida',
+  co2_economizado_kg: 18.24,
+  tags: [ 'urbano', 'intermunicipal', 'tarde' ]
+}
+avaliacoes:
+{
+  _id: 'A0001',
+  viagem_id: 'T0001',
+  avaliador_id: 'U001',
+  avaliado_id: 'U003',
+  papel_avaliado: 'motorista',
+  nota: 5,
+  comentario: 'Motorista pontual e educada, recomendo de olhos fechados',
+  data: ISODate('2026-09-02T12:00:00.000Z')
+}

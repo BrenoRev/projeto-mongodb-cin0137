@@ -1,0 +1,283 @@
+
+==============================================================================
+U01 | Verificar a CNH de uma motorista recém-aprovada (U015)
+Itens da checklist: UPDATEONE, SET, FINDONE
+==============================================================================
+Antes:
+{
+  _id: 'U015',
+  nome: 'Olívia Campos Siqueira',
+  perfis: [ 'motorista', 'passageiro' ],
+  cnh_verificada: false
+}
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+Depois:
+{
+  _id: 'U015',
+  nome: 'Olívia Campos Siqueira',
+  perfis: [ 'motorista', 'passageiro' ],
+  cnh_verificada: true,
+  data_verificacao_cnh: ISODate('2026-11-21T03:00:00.000Z')
+}
+
+==============================================================================
+U02 | Reajustar em 10% as viagens agendadas a partir de 100 km e marcar reajustada: true
+Itens da checklist: UPDATEMANY, SET, GTE, EXISTS
+==============================================================================
+Antes (viagens que atendem ao filtro):
+{
+  _id: 'T0073',
+  data_hora: ISODate('2026-12-03T09:45:00.000Z'),
+  distancia_km: 135,
+  preco_assento: 37
+}
+{
+  _id: 'T0074',
+  data_hora: ISODate('2026-12-04T14:15:00.000Z'),
+  distancia_km: 135,
+  preco_assento: 36.5
+}
+{
+  _id: 'T0078',
+  data_hora: ISODate('2026-12-13T15:30:00.000Z'),
+  distancia_km: 135,
+  preco_assento: 37.5
+}
+Total retornado: 3
+Antes, com findOne, a primeira delas (com os passageiros):
+{
+  _id: 'T0073',
+  data_hora: ISODate('2026-12-03T09:45:00.000Z'),
+  distancia_km: 135,
+  preco_assento: 37,
+  passageiros: [
+    { usuario_id: 'U038', status: 'confirmado', valor_pago: 37 },
+    { usuario_id: 'U027', status: 'cancelado', valor_pago: 0 }
+  ]
+}
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 3,
+  modifiedCount: 3,
+  upsertedCount: 0
+}
+Depois:
+{
+  _id: 'T0073',
+  data_hora: ISODate('2026-12-03T09:45:00.000Z'),
+  distancia_km: 135,
+  preco_assento: 40.7,
+  reajustada: true
+}
+{
+  _id: 'T0074',
+  data_hora: ISODate('2026-12-04T14:15:00.000Z'),
+  distancia_km: 135,
+  preco_assento: 40.15,
+  reajustada: true
+}
+{
+  _id: 'T0078',
+  data_hora: ISODate('2026-12-13T15:30:00.000Z'),
+  distancia_km: 135,
+  preco_assento: 41.25,
+  reajustada: true
+}
+Total retornado: 3
+Depois, com findOne, a primeira delas (preço novo, valor_pago antigo):
+{
+  _id: 'T0073',
+  data_hora: ISODate('2026-12-03T09:45:00.000Z'),
+  distancia_km: 135,
+  preco_assento: 40.7,
+  passageiros: [
+    { usuario_id: 'U038', status: 'confirmado', valor_pago: 37 },
+    { usuario_id: 'U027', status: 'cancelado', valor_pago: 0 }
+  ],
+  reajustada: true
+}
+Repetindo o mesmo updateMany (o filtro com $exists impede reajuste duplo):
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 0,
+  modifiedCount: 0,
+  upsertedCount: 0
+}
+
+==============================================================================
+U03 | Incluir a passageira U041 numa viagem agendada sem permitir duplicidade
+Itens da checklist: UPDATEONE, ADDTOSET, SET, SIZE, FILTER, EXPR
+==============================================================================
+Antes:
+{
+  _id: 'T0074',
+  preco_assento: 40.15,
+  vagas_ofertadas: 4,
+  passageiros: [
+    { usuario_id: 'U033', status: 'confirmado', valor_pago: 36.5 },
+    { usuario_id: 'U006', status: 'confirmado', valor_pago: 36.5 },
+    { usuario_id: 'U003', status: 'cancelado', valor_pago: 0 }
+  ],
+  status: 'agendada',
+  co2_economizado_kg: 32.4
+}
+1ª tentativa (filtro completo): a passageira entra
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+2ª tentativa, subdocumento idêntico e filtro só pelo _id: o $addToSet sozinho impede a duplicata
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 0,
+  upsertedCount: 0
+}
+3ª tentativa, mesma passageira com valor_pago diferente e filtro completo: a guarda $ne impede
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 0,
+  modifiedCount: 0,
+  upsertedCount: 0
+}
+Recálculo do CO2 previsto (distância x 0,12 x confirmados):
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+Depois:
+{
+  _id: 'T0074',
+  preco_assento: 40.15,
+  vagas_ofertadas: 4,
+  passageiros: [
+    { usuario_id: 'U033', status: 'confirmado', valor_pago: 36.5 },
+    { usuario_id: 'U006', status: 'confirmado', valor_pago: 36.5 },
+    { usuario_id: 'U003', status: 'cancelado', valor_pago: 0 },
+    { usuario_id: 'U041', status: 'confirmado', valor_pago: 40.15 }
+  ],
+  status: 'agendada',
+  co2_economizado_kg: 48.6
+}
+
+==============================================================================
+U04 | Adicionar várias preferências à usuária U041 de uma vez
+Itens da checklist: UPDATEONE, ADDTOSET
+==============================================================================
+Antes:
+{
+  _id: 'U041',
+  nome: 'Tatiana Rocha Guedes',
+  preferencias: [ 'silencio' ]
+}
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+Depois:
+{
+  _id: 'U041',
+  nome: 'Tatiana Rocha Guedes',
+  preferencias: [ 'silencio', 'pet friendly', 'musica', 'ar condicionado' ]
+}
+
+==============================================================================
+U05 | Cadastrar ou atualizar um veículo pela placa (upsert)
+Itens da checklist: UPDATEONE, SET
+Outros recursos: upsert, $setOnInsert
+==============================================================================
+Antes (conferência: o esperado é null, a placa ainda não existe):
+null
+1ª chamada: a placa não existe, então o upsert insere
+{
+  acknowledged: true,
+  insertedId: 'V019',
+  matchedCount: 0,
+  modifiedCount: 0,
+  upsertedCount: 1
+}
+{
+  _id: 'V019',
+  placa: 'SDK2U71',
+  ano: 2025,
+  cadastrado_em: ISODate('2026-11-21T03:00:00.000Z'),
+  capacidade: 4,
+  combustivel: 'eletrico',
+  eletrico: true,
+  marca: 'BYD',
+  modelo: 'Dolphin Mini',
+  motorista_id: 'U014'
+}
+2ª chamada: a placa já existe, então o upsert só atualiza (vistoria corrigiu a capacidade)
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+Depois:
+{
+  _id: 'V019',
+  placa: 'SDK2U71',
+  ano: 2025,
+  cadastrado_em: ISODate('2026-11-21T03:00:00.000Z'),
+  capacidade: 5,
+  combustivel: 'eletrico',
+  eletrico: true,
+  marca: 'BYD',
+  modelo: 'Dolphin Mini',
+  motorista_id: 'U014'
+}
+Veículos com essa placa: 1
+
+==============================================================================
+U06 | Cancelar viagens agendadas cuja data já passou
+Itens da checklist: UPDATEMANY, SET
+==============================================================================
+Agendadas com data vencida: T0063, T0068, T0070
+Antes, com findOne, a primeira delas:
+{
+  _id: 'T0063',
+  data_hora: ISODate('2026-11-12T10:30:00.000Z'),
+  passageiros: [ { usuario_id: 'U024', status: 'confirmado', valor_pago: 31.5 } ],
+  status: 'agendada',
+  co2_economizado_kg: 15
+}
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 3,
+  modifiedCount: 3,
+  upsertedCount: 0
+}
+Depois, com findOne, a mesma viagem:
+{
+  _id: 'T0063',
+  data_hora: ISODate('2026-11-12T10:30:00.000Z'),
+  passageiros: [ { usuario_id: 'U024', status: 'cancelado', valor_pago: 0 } ],
+  status: 'cancelada',
+  co2_economizado_kg: 0,
+  cancelada_em: ISODate('2026-11-21T03:00:00.000Z'),
+  motivo_cancelamento: 'data expirada sem confirmação do motorista'
+}
+Agendadas restantes: 9 | canceladas agora: 11

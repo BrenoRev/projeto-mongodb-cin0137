@@ -1,0 +1,572 @@
+
+==============================================================================
+G01 | Quais são os 5 motoristas que mais economizaram CO2 em viagens concluídas?
+Itens da checklist: AGGREGATE, MATCH, GROUP, SUM, SORT, LIMIT, LOOKUP, PROJECT
+==============================================================================
+{
+  motorista_id: 'U010',
+  nome: 'João Victor Albuquerque',
+  co2_total_kg: 174.12,
+  viagens: 6,
+  km_rodados: 467
+}
+{
+  motorista_id: 'U006',
+  nome: 'Felipe Cavalcanti Rocha',
+  co2_total_kg: 158.52,
+  viagens: 5,
+  km_rodados: 508
+}
+{
+  motorista_id: 'U002',
+  nome: 'Bruno Henrique Santos',
+  co2_total_kg: 106.08,
+  viagens: 4,
+  km_rodados: 327
+}
+{
+  motorista_id: 'U004',
+  nome: 'Diego Ferreira Costa',
+  co2_total_kg: 94.2,
+  viagens: 7,
+  km_rodados: 294
+}
+{
+  motorista_id: 'U007',
+  nome: 'Gabriela Souza Pires',
+  co2_total_kg: 90.36,
+  viagens: 4,
+  km_rodados: 304
+}
+Total retornado: 5
+
+==============================================================================
+G02 | Qual a nota média e a maior nota de cada motorista (com 3 ou mais avaliações), com o nome dele?
+Itens da checklist: AGGREGATE, MATCH, GROUP, AVG, MAX, GTE, LOOKUP, PROJECT, SORT
+==============================================================================
+{
+  motorista_id: 'U008',
+  nome: 'Henrique Barbosa Lins',
+  nota_media: 4.86,
+  maior_nota: 5,
+  menor_nota: 4,
+  avaliacoes: 7
+}
+{
+  motorista_id: 'U002',
+  nome: 'Bruno Henrique Santos',
+  nota_media: 4.43,
+  maior_nota: 5,
+  menor_nota: 4,
+  avaliacoes: 7
+}
+{
+  motorista_id: 'U003',
+  nome: 'Carla Mendes Araújo',
+  nota_media: 4.33,
+  maior_nota: 5,
+  menor_nota: 2,
+  avaliacoes: 12
+}
+{
+  motorista_id: 'U009',
+  nome: 'Isabela Tavares Moura',
+  nota_media: 4.25,
+  maior_nota: 5,
+  menor_nota: 3,
+  avaliacoes: 4
+}
+{
+  motorista_id: 'U011',
+  nome: 'Karina Oliveira Dantas',
+  nota_media: 4.2,
+  maior_nota: 5,
+  menor_nota: 3,
+  avaliacoes: 5
+}
+{
+  motorista_id: 'U007',
+  nome: 'Gabriela Souza Pires',
+  nota_media: 4.14,
+  maior_nota: 5,
+  menor_nota: 3,
+  avaliacoes: 7
+}
+{
+  motorista_id: 'U010',
+  nome: 'João Victor Albuquerque',
+  nota_media: 4.11,
+  maior_nota: 5,
+  menor_nota: 2,
+  avaliacoes: 9
+}
+{
+  motorista_id: 'U013',
+  nome: 'Mariana Freitas Leão',
+  nota_media: 3.88,
+  maior_nota: 5,
+  menor_nota: 1,
+  avaliacoes: 8
+}
+{
+  motorista_id: 'U004',
+  nome: 'Diego Ferreira Costa',
+  nota_media: 3.78,
+  maior_nota: 5,
+  menor_nota: 1,
+  avaliacoes: 9
+}
+{
+  motorista_id: 'U001',
+  nome: 'Ana Beatriz Lima',
+  nota_media: 3.75,
+  maior_nota: 5,
+  menor_nota: 2,
+  avaliacoes: 4
+}
+{
+  motorista_id: 'U006',
+  nome: 'Felipe Cavalcanti Rocha',
+  nota_media: 3.73,
+  maior_nota: 5,
+  menor_nota: 1,
+  avaliacoes: 11
+}
+{
+  motorista_id: 'U014',
+  nome: 'Nathan Ribeiro Brito',
+  nota_media: 3.4,
+  maior_nota: 5,
+  menor_nota: 2,
+  avaliacoes: 5
+}
+Total retornado: 12
+Motoristas fora do ranking por terem menos de 3 avaliações:
+  U005: 2 avaliações, média 4.50, ocuparia a posição 2 sem o filtro
+  U012: 2 avaliações, média 3.50, ocuparia a posição 12 sem o filtro
+
+==============================================================================
+G03 | Como cada viagem se classifica em economia de CO2 (alta, média, baixa) e ocupação (lotada ou com vaga)?
+Itens da checklist: AGGREGATE, MATCH, PROJECT, COND, SIZE, FILTER, GROUP
+==============================================================================
+{
+  _id: 'T0049',
+  vagas_ofertadas: 4,
+  co2_economizado_kg: 64.8,
+  rota: 'Recife > Caruaru',
+  na_lista: 5,
+  confirmados: 4,
+  faixa_co2: 'alta',
+  ocupacao: 'lotada'
+}
+{
+  _id: 'T0017',
+  vagas_ofertadas: 3,
+  co2_economizado_kg: 52.2,
+  rota: 'Olinda > Caruaru',
+  na_lista: 3,
+  confirmados: 3,
+  faixa_co2: 'alta',
+  ocupacao: 'lotada'
+}
+{
+  _id: 'T0054',
+  vagas_ofertadas: 3,
+  co2_economizado_kg: 52.2,
+  rota: 'Olinda > Caruaru',
+  na_lista: 4,
+  confirmados: 3,
+  faixa_co2: 'alta',
+  ocupacao: 'lotada'
+}
+{
+  _id: 'T0059',
+  vagas_ofertadas: 3,
+  co2_economizado_kg: 52.2,
+  rota: 'Olinda > Caruaru',
+  na_lista: 3,
+  confirmados: 3,
+  faixa_co2: 'alta',
+  ocupacao: 'lotada'
+}
+{
+  _id: 'T0061',
+  vagas_ofertadas: 3,
+  co2_economizado_kg: 52.2,
+  rota: 'Olinda > Caruaru',
+  na_lista: 3,
+  confirmados: 3,
+  faixa_co2: 'alta',
+  ocupacao: 'lotada'
+}
+{
+  _id: 'T0014',
+  vagas_ofertadas: 3,
+  co2_economizado_kg: 48.6,
+  rota: 'Recife > Caruaru',
+  na_lista: 3,
+  confirmados: 3,
+  faixa_co2: 'alta',
+  ocupacao: 'lotada'
+}
+{
+  _id: 'T0038',
+  vagas_ofertadas: 3,
+  co2_economizado_kg: 48.6,
+  rota: 'Recife > Caruaru',
+  na_lista: 4,
+  confirmados: 3,
+  faixa_co2: 'alta',
+  ocupacao: 'lotada'
+}
+{
+  _id: 'T0042',
+  vagas_ofertadas: 4,
+  co2_economizado_kg: 45,
+  rota: 'Camaragibe > Caruaru',
+  na_lista: 4,
+  confirmados: 3,
+  faixa_co2: 'alta',
+  ocupacao: 'com vaga'
+}
+... (52 documento(s) omitido(s) na listagem)
+Total retornado: 60
+Resumo por faixa de CO2 e ocupação:
+{ _id: { faixa_co2: 'alta', ocupacao: 'com vaga' }, viagens: 2 }
+{ _id: { faixa_co2: 'alta', ocupacao: 'lotada' }, viagens: 13 }
+{ _id: { faixa_co2: 'baixa', ocupacao: 'com vaga' }, viagens: 15 }
+{ _id: { faixa_co2: 'baixa', ocupacao: 'lotada' }, viagens: 12 }
+{ _id: { faixa_co2: 'média', ocupacao: 'com vaga' }, viagens: 8 }
+{ _id: { faixa_co2: 'média', ocupacao: 'lotada' }, viagens: 10 }
+Total retornado: 6
+
+==============================================================================
+G04 | Em cada viagem, quem são só os passageiros confirmados e quantos são?
+Itens da checklist: AGGREGATE, MATCH, PROJECT, FILTER, SIZE, EXPR, SORT
+==============================================================================
+{
+  _id: 'T0007',
+  total_na_lista: 2,
+  ids_confirmados: [ 'U005' ],
+  qtd_confirmados: 1,
+  desistencias: 1
+}
+{
+  _id: 'T0008',
+  total_na_lista: 4,
+  ids_confirmados: [ 'U006', 'U010', 'U007' ],
+  qtd_confirmados: 3,
+  desistencias: 1
+}
+{
+  _id: 'T0010',
+  total_na_lista: 3,
+  ids_confirmados: [ 'U008', 'U012' ],
+  qtd_confirmados: 2,
+  desistencias: 1
+}
+{
+  _id: 'T0011',
+  total_na_lista: 2,
+  ids_confirmados: [ 'U009' ],
+  qtd_confirmados: 1,
+  desistencias: 1
+}
+{
+  _id: 'T0027',
+  total_na_lista: 3,
+  ids_confirmados: [ 'U027', 'U016' ],
+  qtd_confirmados: 2,
+  desistencias: 1
+}
+{
+  _id: 'T0031',
+  total_na_lista: 3,
+  ids_confirmados: [ 'U003', 'U019' ],
+  qtd_confirmados: 2,
+  desistencias: 1
+}
+{
+  _id: 'T0033',
+  total_na_lista: 5,
+  ids_confirmados: [ 'U035', 'U019', 'U006', 'U003' ],
+  qtd_confirmados: 4,
+  desistencias: 1
+}
+{
+  _id: 'T0038',
+  total_na_lista: 4,
+  ids_confirmados: [ 'U001', 'U034', 'U009' ],
+  qtd_confirmados: 3,
+  desistencias: 1
+}
+... (9 documento(s) omitido(s) na listagem)
+Total retornado: 17
+Viagens com desistência, com $expr: 17; sem $expr (compara com o texto "$total_na_lista"): 0
+Para comparação, as 3 primeiras viagens concluídas sem desistência:
+{
+  _id: 'T0001',
+  total_na_lista: 4,
+  ids_confirmados: [ 'U001', 'U033', 'U025', 'U039' ],
+  qtd_confirmados: 4,
+  desistencias: 0
+}
+{
+  _id: 'T0003',
+  total_na_lista: 1,
+  ids_confirmados: [ 'U002' ],
+  qtd_confirmados: 1,
+  desistencias: 0
+}
+{
+  _id: 'T0004',
+  total_na_lista: 2,
+  ids_confirmados: [ 'U003', 'U021' ],
+  qtd_confirmados: 2,
+  desistencias: 0
+}
+Total retornado: 3
+
+==============================================================================
+G05 | Quanto cada motorista faturou, contando apenas passageiros confirmados?
+Itens da checklist: AGGREGATE, MATCH, GROUP, SUM, COND, ADDTOSET, LOOKUP, PROJECT, SORT
+==============================================================================
+{
+  motorista_id: 'U010',
+  nome: 'João Victor Albuquerque',
+  faturamento: 406,
+  confirmados: 18,
+  cancelamentos: 1,
+  qtd_viagens: 6,
+  ticket_medio: 22.56
+}
+{
+  motorista_id: 'U006',
+  nome: 'Felipe Cavalcanti Rocha',
+  faturamento: 361,
+  confirmados: 13,
+  cancelamentos: 2,
+  qtd_viagens: 5,
+  ticket_medio: 27.77
+}
+{
+  motorista_id: 'U004',
+  nome: 'Diego Ferreira Costa',
+  faturamento: 252.5,
+  confirmados: 19,
+  cancelamentos: 3,
+  qtd_viagens: 7,
+  ticket_medio: 13.29
+}
+{
+  motorista_id: 'U002',
+  nome: 'Bruno Henrique Santos',
+  faturamento: 242.5,
+  confirmados: 10,
+  cancelamentos: 1,
+  qtd_viagens: 4,
+  ticket_medio: 24.25
+}
+{
+  motorista_id: 'U007',
+  nome: 'Gabriela Souza Pires',
+  faturamento: 213,
+  confirmados: 9,
+  cancelamentos: 0,
+  qtd_viagens: 4,
+  ticket_medio: 23.67
+}
+{
+  motorista_id: 'U008',
+  nome: 'Henrique Barbosa Lins',
+  faturamento: 194,
+  confirmados: 11,
+  cancelamentos: 1,
+  qtd_viagens: 5,
+  ticket_medio: 17.64
+}
+{
+  motorista_id: 'U011',
+  nome: 'Karina Oliveira Dantas',
+  faturamento: 193,
+  confirmados: 10,
+  cancelamentos: 2,
+  qtd_viagens: 5,
+  ticket_medio: 19.3
+}
+{
+  motorista_id: 'U003',
+  nome: 'Carla Mendes Araújo',
+  faturamento: 176,
+  confirmados: 16,
+  cancelamentos: 2,
+  qtd_viagens: 4,
+  ticket_medio: 11
+}
+{
+  motorista_id: 'U013',
+  nome: 'Mariana Freitas Leão',
+  faturamento: 157.5,
+  confirmados: 10,
+  cancelamentos: 2,
+  qtd_viagens: 4,
+  ticket_medio: 15.75
+}
+{
+  motorista_id: 'U001',
+  nome: 'Ana Beatriz Lima',
+  faturamento: 150.5,
+  confirmados: 7,
+  cancelamentos: 0,
+  qtd_viagens: 4,
+  ticket_medio: 21.5
+}
+{
+  motorista_id: 'U009',
+  nome: 'Isabela Tavares Moura',
+  faturamento: 133.5,
+  confirmados: 9,
+  cancelamentos: 1,
+  qtd_viagens: 4,
+  ticket_medio: 14.83
+}
+{
+  motorista_id: 'U014',
+  nome: 'Nathan Ribeiro Brito',
+  faturamento: 103,
+  confirmados: 9,
+  cancelamentos: 2,
+  qtd_viagens: 4,
+  ticket_medio: 11.44
+}
+{
+  motorista_id: 'U012',
+  nome: 'Lucas Gomes Pereira',
+  faturamento: 67.5,
+  confirmados: 3,
+  cancelamentos: 0,
+  qtd_viagens: 2,
+  ticket_medio: 22.5
+}
+{
+  motorista_id: 'U005',
+  nome: 'Eduarda Nogueira Melo',
+  faturamento: 41.5,
+  confirmados: 3,
+  cancelamentos: 0,
+  qtd_viagens: 2,
+  ticket_medio: 13.83
+}
+Total retornado: 14
+Faturamento total (soma do ranking): 2691.50 | conferência só com confirmados: 2691.50
+
+==============================================================================
+G06 | Qual a receita, a distância média e a viagem mais longa por mês?
+Itens da checklist: AGGREGATE, MATCH, GROUP, SUM, AVG, MAX, SORT
+==============================================================================
+{
+  _id: '2026-09',
+  viagens: 18,
+  receita: 791.5,
+  maior_distancia_km: 145,
+  viagem_mais_longa: { viagem: 'T0017', rota: 'Olinda > Caruaru' },
+  distancia_media_km: 64.2,
+  co2_kg: 322.44
+}
+{
+  _id: '2026-10',
+  viagens: 25,
+  receita: 1158.5,
+  maior_distancia_km: 135,
+  viagem_mais_longa: { viagem: 'T0035', rota: 'Caruaru > Recife' },
+  distancia_media_km: 64.2,
+  co2_kg: 474.24
+}
+{
+  _id: '2026-11',
+  viagens: 17,
+  receita: 741.5,
+  maior_distancia_km: 145,
+  viagem_mais_longa: { viagem: 'T0054', rota: 'Olinda > Caruaru' },
+  distancia_media_km: 64.5,
+  co2_kg: 305.52
+}
+Total retornado: 3
+
+==============================================================================
+G07 | Qual combustível dá o maior saldo de CO2 por km (economia menos emissão do carro)?
+Itens da checklist: AGGREGATE, MATCH, LOOKUP, GROUP, AVG, SUM, PROJECT, COND
+==============================================================================
+{
+  grupo: 'eletrico',
+  categoria: 'elétrico ou híbrido',
+  viagens: 5,
+  km_rodados: 256,
+  passageiros_por_viagem: 2,
+  economizado_por_km: 0.263,
+  emitido_por_km: 0,
+  saldo_por_km: 0.263
+}
+{
+  grupo: 'flex',
+  categoria: 'combustão',
+  viagens: 34,
+  km_rodados: 2128,
+  passageiros_por_viagem: 2.62,
+  economizado_por_km: 0.314,
+  emitido_por_km: 0.11,
+  saldo_por_km: 0.204
+}
+{
+  grupo: 'hibrido',
+  categoria: 'elétrico ou híbrido',
+  viagens: 6,
+  km_rodados: 344,
+  passageiros_por_viagem: 2.17,
+  economizado_por_km: 0.249,
+  emitido_por_km: 0.07,
+  saldo_por_km: 0.179
+}
+{
+  grupo: 'gasolina',
+  categoria: 'combustão',
+  viagens: 6,
+  km_rodados: 490,
+  passageiros_por_viagem: 2.33,
+  economizado_por_km: 0.279,
+  emitido_por_km: 0.12,
+  saldo_por_km: 0.159
+}
+{
+  grupo: 'gnv',
+  categoria: 'combustão',
+  viagens: 9,
+  km_rodados: 639,
+  passageiros_por_viagem: 2.33,
+  economizado_por_km: 0.227,
+  emitido_por_km: 0.1,
+  saldo_por_km: 0.127
+}
+Total retornado: 5
+Comparação direta: elétrico ou híbrido x combustão
+{
+  grupo: 'elétrico ou híbrido',
+  categoria: 'elétrico ou híbrido',
+  viagens: 11,
+  km_rodados: 600,
+  passageiros_por_viagem: 2.09,
+  economizado_por_km: 0.255,
+  emitido_por_km: 0.04,
+  saldo_por_km: 0.215
+}
+{
+  grupo: 'combustão',
+  categoria: 'combustão',
+  viagens: 49,
+  km_rodados: 3257,
+  passageiros_por_viagem: 2.53,
+  economizado_por_km: 0.291,
+  emitido_por_km: 0.11,
+  saldo_por_km: 0.182
+}
+Total retornado: 2

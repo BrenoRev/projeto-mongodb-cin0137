@@ -1,0 +1,79 @@
+
+==============================================================================
+R05 | Contagens antes do arquivamento e das remoções
+Itens da checklist: COUNTDOCUMENTS
+==============================================================================
+{
+  viagens: 80,
+  canceladas: 11,
+  historico_cancelamentos: 0,
+  avaliacoes: 120
+}
+
+==============================================================================
+R01 | Copiar as viagens canceladas para uma coleção temporária com $out
+Itens da checklist: AGGREGATE, MATCH, GROUP
+Outros recursos: $unionWith, $out
+==============================================================================
+Documentos em historico_cancelamentos_tmp: 11 (11 canceladas em viagens + 0 já arquivadas; _id distintos: 11)
+Exemplo de documento copiado:
+{
+  _id: 'T0063',
+  passageiros: [ { status: 'cancelado' } ],
+  status: 'cancelada',
+  motivo_cancelamento: 'data expirada sem confirmação do motorista',
+  arquivada_em: ISODate('2026-11-21T03:00:00.000Z')
+}
+
+==============================================================================
+R02 | Renomear a coleção temporária para historico_cancelamentos
+Itens da checklist: RENAMECOLLECTION
+==============================================================================
+Coleções antes: avaliacoes, historico_cancelamentos_tmp, usuarios, veiculos, viagens
+{
+  ok: 1
+}
+Coleções depois: avaliacoes, historico_cancelamentos, usuarios, veiculos, viagens
+Viagens no histórico, por motivo:
+{ _id: 'cancelada pelo motorista ou pelos passageiros', viagens: 8 }
+{ _id: 'data expirada sem confirmação do motorista', viagens: 3 }
+Total retornado: 2
+
+==============================================================================
+R03 | Remover as viagens canceladas da coleção principal
+Itens da checklist: nenhum (operação de apoio)
+Outros recursos: deleteMany
+==============================================================================
+Conferência (o esperado é 0): avaliações ligadas às viagens canceladas: 0
+{ acknowledged: true, deletedCount: 11 }
+
+==============================================================================
+R04 | Remover uma avaliação ofensiva específica
+Itens da checklist: FINDONE, TEXT, SEARCH
+Outros recursos: deleteOne
+==============================================================================
+Avaliação encontrada:
+{
+  _id: 'A0071',
+  viagem_id: 'T0042',
+  avaliador_id: 'U015',
+  avaliado_id: 'U006',
+  papel_avaliado: 'motorista',
+  nota: 1,
+  comentario: 'Motorista idiota e imbecil, nunca mais pego carona com quem dirige assim',
+  data: ISODate('2026-10-22T23:15:00.000Z')
+}
+{ acknowledged: true, deletedCount: 1 }
+Conferência (o esperado é null): findOne pelo mesmo _id depois da remoção: null
+
+==============================================================================
+R05 | Contagens depois do arquivamento e das remoções
+Itens da checklist: COUNTDOCUMENTS
+==============================================================================
+{
+  viagens: 69,
+  canceladas: 0,
+  historico_cancelamentos: 11,
+  avaliacoes: 119
+}
+viagens: 80 - 11 = 69 | avaliacoes: 120 - 1 = 119 | contagens conferem: SIM

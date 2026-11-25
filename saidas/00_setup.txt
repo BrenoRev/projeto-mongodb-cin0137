@@ -1,0 +1,28 @@
+
+==============================================================================
+S01 | Selecionar o banco caronas_sustentaveis
+Itens da checklist: USE
+==============================================================================
+Banco selecionado: caronas_sustentaveis
+
+==============================================================================
+S02 | Remover dados antigos, criar coleções e índices
+Itens da checklist: nenhum (operação de apoio)
+Outros recursos: dropDatabase, createCollection, createIndex
+==============================================================================
+dropDatabase ok: 1
+Coleção criada: usuarios
+Coleção criada: veiculos
+Coleção criada: viagens
+Coleção criada: avaliacoes
+
+Índices criados:
+  usuarios._id_ {"_id":1}
+  usuarios.idx_email_unico {"email":1} (único)
+  veiculos._id_ {"_id":1}
+  veiculos.idx_placa_unica {"placa":1} (único)
+  viagens._id_ {"_id":1}
+  viagens.idx_motorista_status {"motorista_id":1,"status":1}
+  viagens.idx_origem_cidade {"origem.cidade":1}
+  avaliacoes._id_ {"_id":1}
+  avaliacoes.idx_texto_comentario {"_fts":"text","_ftsx":1} (texto, portuguese)

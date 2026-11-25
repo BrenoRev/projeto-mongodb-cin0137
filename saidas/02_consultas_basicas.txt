@@ -1,0 +1,636 @@
+
+==============================================================================
+C01 | Quais motoristas já têm CNH verificada e quais estão pendentes? (nome, cidade, situação)
+Itens da checklist: FIND, EXISTS, SORT, PRETTY
+==============================================================================
+{
+  _id: 'U001',
+  nome: 'Ana Beatriz Lima',
+  endereco: { cidade: 'Recife' },
+  cnh_verificada: true
+}
+{
+  _id: 'U002',
+  nome: 'Bruno Henrique Santos',
+  endereco: { cidade: 'Recife' },
+  cnh_verificada: true
+}
+{
+  _id: 'U003',
+  nome: 'Carla Mendes Araújo',
+  endereco: { cidade: 'Recife' },
+  cnh_verificada: true
+}
+{
+  _id: 'U004',
+  nome: 'Diego Ferreira Costa',
+  endereco: { cidade: 'Paulista' },
+  cnh_verificada: true
+}
+{
+  _id: 'U005',
+  nome: 'Eduarda Nogueira Melo',
+  endereco: { cidade: 'Caruaru' },
+  cnh_verificada: true
+}
+{
+  _id: 'U006',
+  nome: 'Felipe Cavalcanti Rocha',
+  endereco: { cidade: 'Caruaru' },
+  cnh_verificada: true
+}
+{
+  _id: 'U007',
+  nome: 'Gabriela Souza Pires',
+  endereco: { cidade: 'Gravatá' },
+  cnh_verificada: true
+}
+{
+  _id: 'U008',
+  nome: 'Henrique Barbosa Lins',
+  endereco: { cidade: 'Cabo de Santo Agostinho' },
+  cnh_verificada: true
+}
+{
+  _id: 'U009',
+  nome: 'Isabela Tavares Moura',
+  endereco: { cidade: 'Camaragibe' },
+  cnh_verificada: true
+}
+{
+  _id: 'U010',
+  nome: 'João Victor Albuquerque',
+  endereco: { cidade: 'Gravatá' },
+  cnh_verificada: true
+}
+{
+  _id: 'U011',
+  nome: 'Karina Oliveira Dantas',
+  endereco: { cidade: 'Gravatá' },
+  cnh_verificada: true
+}
+{
+  _id: 'U012',
+  nome: 'Lucas Gomes Pereira',
+  endereco: { cidade: 'Recife' },
+  cnh_verificada: true
+}
+{
+  _id: 'U013',
+  nome: 'Mariana Freitas Leão',
+  endereco: { cidade: 'Cabo de Santo Agostinho' },
+  cnh_verificada: true
+}
+{
+  _id: 'U014',
+  nome: 'Nathan Ribeiro Brito',
+  endereco: { cidade: 'Recife' },
+  cnh_verificada: true
+}
+{
+  _id: 'U015',
+  nome: 'Olívia Campos Siqueira',
+  endereco: { cidade: 'Caruaru' },
+  cnh_verificada: false
+}
+Total retornado: 15
+Contraste de formatação com o primeiro documento:
+  sem formatação (uma linha, como o shell legado sem pretty): {"_id":"U001","nome":"Ana Beatriz Lima","endereco":{"cidade":"Recife"},"cnh_verificada":true}
+  com pretty print (um campo por linha):
+{
+  _id: 'U001',
+  nome: 'Ana Beatriz Lima',
+  endereco: {
+    cidade: 'Recife'
+  },
+  cnh_verificada: true
+}
+Pendentes com { $exists: true, $ne: true }:
+{ _id: 'U015', nome: 'Olívia Campos Siqueira', cnh_verificada: false }
+Total retornado: 1
+Para comparação, { $ne: true } sem $exists traz 27 usuários, dos quais 26 são passageiros sem o campo.
+
+==============================================================================
+C02 | Quais são os dados de cadastro da usuária com e-mail ana.lima@email.com?
+Itens da checklist: FINDONE, FIND, SORT, COUNTDOCUMENTS
+==============================================================================
+{
+  _id: 'U001',
+  nome: 'Ana Beatriz Lima',
+  email: 'ana.lima@email.com',
+  telefone: '81999990001',
+  endereco: {
+    bairro: 'Boa Viagem',
+    cidade: 'Recife',
+    uf: 'PE'
+  },
+  perfis: [
+    'motorista',
+    'passageiro'
+  ],
+  preferencias: [
+    'sem fumo',
+    'musica',
+    'pet friendly'
+  ],
+  cnh_verificada: true,
+  data_cadastro: ISODate('2025-07-13T14:00:00.000Z')
+}
+Veículos da usuária:
+{
+  _id: 'V001',
+  marca: 'BYD',
+  modelo: 'Dolphin',
+  combustivel: 'eletrico'
+}
+{ _id: 'V002', marca: 'Fiat', modelo: 'Argo', combustivel: 'flex' }
+Total retornado: 2
+Viagens como motorista: 5 | como passageira confirmada: 7
+Reservas canceladas por ela, com $elemMatch: 0 | com as condições soltas: 1 (resposta errada)
+Viagem contada a mais sem $elemMatch (ela confirmou; quem cancelou foi outra pessoa):
+{
+  _id: 'T0038',
+  passageiros: [
+    { usuario_id: 'U001', status: 'confirmado' },
+    { usuario_id: 'U034', status: 'confirmado' },
+    { usuario_id: 'U009', status: 'confirmado' },
+    { usuario_id: 'U003', status: 'cancelado' }
+  ]
+}
+Total retornado: 1
+
+==============================================================================
+C03 | Quais são as 5 viagens mais caras entre as de 50 km ou mais e assento a partir de R$ 20?
+Itens da checklist: FIND, GTE, SORT, LIMIT
+==============================================================================
+{
+  _id: 'T0054',
+  origem: { cidade: 'Olinda' },
+  destino: { cidade: 'Caruaru' },
+  data_hora: ISODate('2026-11-02T22:30:00.000Z'),
+  distancia_km: 145,
+  preco_assento: 40,
+  status: 'concluida'
+}
+{
+  _id: 'T0059',
+  origem: { cidade: 'Olinda' },
+  destino: { cidade: 'Caruaru' },
+  data_hora: ISODate('2026-11-08T14:15:00.000Z'),
+  distancia_km: 145,
+  preco_assento: 39,
+  status: 'concluida'
+}
+{
+  _id: 'T0078',
+  origem: { cidade: 'Recife' },
+  destino: { cidade: 'Caruaru' },
+  data_hora: ISODate('2026-12-13T15:30:00.000Z'),
+  distancia_km: 135,
+  preco_assento: 37.5,
+  status: 'agendada'
+}
+{
+  _id: 'T0017',
+  origem: { cidade: 'Olinda' },
+  destino: { cidade: 'Caruaru' },
+  data_hora: ISODate('2026-09-20T22:45:00.000Z'),
+  distancia_km: 145,
+  preco_assento: 37,
+  status: 'concluida'
+}
+{
+  _id: 'T0067',
+  origem: { cidade: 'Olinda' },
+  destino: { cidade: 'Caruaru' },
+  data_hora: ISODate('2026-11-16T15:30:00.000Z'),
+  distancia_km: 145,
+  preco_assento: 37,
+  status: 'concluida'
+}
+Total retornado: 5
+Viagens que atendem ao filtro, antes do limit: 33
+
+==============================================================================
+C04 | Quais viagens concluídas saíram com exatamente 3 passageiros na lista?
+Itens da checklist: FIND, SIZE, SORT
+==============================================================================
+{
+  _id: 'T0010',
+  origem: { cidade: 'Recife' },
+  destino: { cidade: 'Gravatá' },
+  vagas_ofertadas: 2,
+  passageiros: [
+    { usuario_id: 'U008', status: 'confirmado' },
+    { usuario_id: 'U012', status: 'confirmado' },
+    { usuario_id: 'U025', status: 'cancelado' }
+  ]
+}
+{
+  _id: 'T0014',
+  origem: { cidade: 'Recife' },
+  destino: { cidade: 'Caruaru' },
+  vagas_ofertadas: 3,
+  passageiros: [
+    { usuario_id: 'U011', status: 'confirmado' },
+    { usuario_id: 'U017', status: 'confirmado' },
+    { usuario_id: 'U008', status: 'confirmado' }
+  ]
+}
+{
+  _id: 'T0016',
+  origem: { cidade: 'Olinda' },
+  destino: { cidade: 'Recife' },
+  vagas_ofertadas: 2,
+  passageiros: [
+    { usuario_id: 'U012', status: 'confirmado' },
+    { usuario_id: 'U007', status: 'confirmado' },
+    { usuario_id: 'U027', status: 'confirmado' }
+  ]
+}
+{
+  _id: 'T0017',
+  origem: { cidade: 'Olinda' },
+  destino: { cidade: 'Caruaru' },
+  vagas_ofertadas: 3,
+  passageiros: [
+    { usuario_id: 'U013', status: 'confirmado' },
+    { usuario_id: 'U039', status: 'confirmado' },
+    { usuario_id: 'U029', status: 'confirmado' }
+  ]
+}
+{
+  _id: 'T0020',
+  origem: { cidade: 'Olinda' },
+  destino: { cidade: 'Recife' },
+  vagas_ofertadas: 3,
+  passageiros: [
+    { usuario_id: 'U027', status: 'confirmado' },
+    { usuario_id: 'U031', status: 'confirmado' },
+    { usuario_id: 'U012', status: 'confirmado' }
+  ]
+}
+{
+  _id: 'T0023',
+  origem: { cidade: 'Recife' },
+  destino: { cidade: 'Gravatá' },
+  vagas_ofertadas: 4,
+  passageiros: [
+    { usuario_id: 'U005', status: 'confirmado' },
+    { usuario_id: 'U032', status: 'confirmado' },
+    { usuario_id: 'U030', status: 'confirmado' }
+  ]
+}
+... (15 documento(s) omitido(s) na listagem)
+Total retornado: 21
+
+==============================================================================
+C05 | Quais usuários aceitam, ao mesmo tempo, pet e música?
+Itens da checklist: FIND, ALL, SORT
+==============================================================================
+{
+  _id: 'U001',
+  nome: 'Ana Beatriz Lima',
+  endereco: { cidade: 'Recife' },
+  preferencias: [ 'sem fumo', 'musica', 'pet friendly' ]
+}
+{
+  _id: 'U007',
+  nome: 'Gabriela Souza Pires',
+  endereco: { cidade: 'Gravatá' },
+  preferencias: [ 'bagagem grande', 'musica', 'sem fumo', 'pet friendly' ]
+}
+{
+  _id: 'U009',
+  nome: 'Isabela Tavares Moura',
+  endereco: { cidade: 'Camaragibe' },
+  preferencias: [ 'bagagem grande', 'pet friendly', 'musica' ]
+}
+{
+  _id: 'U037',
+  nome: 'Manuela Dias Carneiro',
+  endereco: { cidade: 'Recife' },
+  preferencias: [ 'pet friendly', 'sem fumo', 'musica' ]
+}
+{
+  _id: 'U015',
+  nome: 'Olívia Campos Siqueira',
+  endereco: { cidade: 'Caruaru' },
+  preferencias: [ 'musica', 'pet friendly' ]
+}
+Total retornado: 5
+Para comparação, usuários que aceitam pet OU música ($in): 25
+
+==============================================================================
+C06 | Quantas viagens concluídas saíram de Recife? Como Recife se compara às outras origens?
+Itens da checklist: COUNTDOCUMENTS
+==============================================================================
+Viagens concluídas com origem em Recife: 26
+Total de viagens concluídas: 60 (Recife responde por 43.3%)
+Por cidade de origem (concluídas | agendadas):
+  Cabo de Santo Agostinho: 0 | 1
+  Camaragibe: 5 | 2
+  Caruaru: 6 | 2
+  Gravatá: 5 | 0
+  Jaboatão dos Guararapes: 3 | 0
+  Olinda: 11 | 0
+  Paulista: 4 | 0
+  Recife: 26 | 7
+
+==============================================================================
+C07 | Quais avaliações elogiam pontualidade ou educação e não mencionam atraso?
+Itens da checklist: TEXT, SEARCH, GTE, SORT, LIMIT
+==============================================================================
+{
+  _id: 'A0018',
+  nota: 4,
+  comentario: 'Educada e pontual, conversa agradável',
+  score: 1.25
+}
+{
+  _id: 'A0004',
+  nota: 4,
+  comentario: 'Educada e pontual, só demorou um pouco no embarque',
+  score: 1.2
+}
+{
+  _id: 'A0087',
+  nota: 4,
+  comentario: 'Educada e pontual, só demorou um pouco no embarque',
+  score: 1.2
+}
+{
+  _id: 'A0092',
+  nota: 4,
+  comentario: 'Educada e pontual, só demorou um pouco no embarque',
+  score: 1.2
+}
+{
+  _id: 'A0001',
+  nota: 5,
+  comentario: 'Motorista pontual e educada, recomendo de olhos fechados',
+  score: 1.1666666666666667
+}
+{
+  _id: 'A0069',
+  nota: 5,
+  comentario: 'Motorista pontual e educado, carro limpo e cheiroso',
+  score: 1.1666666666666667
+}
+{
+  _id: 'A0078',
+  nota: 5,
+  comentario: 'Motorista pontual e educado, recomendo de olhos fechados',
+  score: 1.1666666666666667
+}
+{
+  _id: 'A0024',
+  nota: 5,
+  comentario: 'Motorista pontual e educado, direção segura o tempo todo',
+  score: 1.1428571428571428
+}
+Total retornado: 8
+Elogios sem menção a atraso (nota >= 4): 43
+Mesma busca sem o termo -atrasou: 47 | sem o filtro de nota: 44
+Avaliações com nota baixa que a busca textual pegaria sem o filtro de nota:
+{
+  _id: 'A0076',
+  nota: 1,
+  comentario: 'Motorista grosseiro e mal-educado, excesso de velocidade o tempo todo'
+}
+Total retornado: 1
+Avaliações que o termo -atrasou retirou do resultado:
+{
+  _id: 'A0025',
+  nota: 4,
+  comentario: 'Educado e pontual, apesar do atraso de dez minutos'
+}
+{
+  _id: 'A0028',
+  nota: 4,
+  comentario: 'Motorista educada, apesar do pequeno atraso na saída'
+}
+{
+  _id: 'A0030',
+  nota: 4,
+  comentario: 'Motorista educado, apesar do pequeno atraso na saída'
+}
+{
+  _id: 'A0032',
+  nota: 4,
+  comentario: 'Chegou pontualmente, mas atrasou uns cinco minutos'
+}
+Total retornado: 4
+Frase exata "direção perigosa" em avaliações com nota até 2:
+{
+  _id: 'A0014',
+  avaliado_id: 'U013',
+  nota: 1,
+  comentario: 'Direção perigosa, não recomendo de jeito nenhum'
+}
+Total retornado: 1
+
+==============================================================================
+C08 | Quais veículos não têm o campo eletrico (frota a combustão)?
+Itens da checklist: FIND, EXISTS, SORT, COUNTDOCUMENTS
+==============================================================================
+{
+  _id: 'V010',
+  motorista_id: 'U007',
+  marca: 'Fiat',
+  modelo: 'Uno',
+  ano: 2014,
+  combustivel: 'gasolina'
+}
+{
+  _id: 'V011',
+  motorista_id: 'U008',
+  marca: 'Fiat',
+  modelo: 'Siena',
+  ano: 2015,
+  combustivel: 'gnv'
+}
+{
+  _id: 'V016',
+  motorista_id: 'U013',
+  marca: 'Ford',
+  modelo: 'Ka',
+  ano: 2015,
+  combustivel: 'gnv'
+}
+{
+  _id: 'V003',
+  motorista_id: 'U002',
+  marca: 'Volkswagen',
+  modelo: 'Gol',
+  ano: 2016,
+  combustivel: 'flex'
+}
+{
+  _id: 'V005',
+  motorista_id: 'U003',
+  marca: 'Chevrolet',
+  modelo: 'Spin',
+  ano: 2018,
+  combustivel: 'flex'
+}
+{
+  _id: 'V002',
+  motorista_id: 'U001',
+  marca: 'Fiat',
+  modelo: 'Argo',
+  ano: 2019,
+  combustivel: 'flex'
+}
+{
+  _id: 'V012',
+  motorista_id: 'U009',
+  marca: 'Honda',
+  modelo: 'City',
+  ano: 2019,
+  combustivel: 'gasolina'
+}
+{
+  _id: 'V006',
+  motorista_id: 'U004',
+  marca: 'Hyundai',
+  modelo: 'HB20',
+  ano: 2020,
+  combustivel: 'flex'
+}
+{
+  _id: 'V008',
+  motorista_id: 'U006',
+  marca: 'Chevrolet',
+  modelo: 'Onix',
+  ano: 2021,
+  combustivel: 'flex'
+}
+{
+  _id: 'V013',
+  motorista_id: 'U010',
+  marca: 'Jeep',
+  modelo: 'Renegade',
+  ano: 2021,
+  combustivel: 'flex'
+}
+{
+  _id: 'V007',
+  motorista_id: 'U005',
+  marca: 'Renault',
+  modelo: 'Kwid',
+  ano: 2022,
+  combustivel: 'flex'
+}
+{
+  _id: 'V015',
+  motorista_id: 'U012',
+  marca: 'Volkswagen',
+  modelo: 'Polo',
+  ano: 2022,
+  combustivel: 'flex'
+}
+{
+  _id: 'V017',
+  motorista_id: 'U014',
+  marca: 'Nissan',
+  modelo: 'Kicks',
+  ano: 2023,
+  combustivel: 'flex'
+}
+Total retornado: 13
+Conferência (o esperado é 0): veículos com { eletrico: false }: 0
+Frota a combustão: 13 de 18 veículos
+Viagens concluídas feitas com a frota a combustão: 49 de 60
+
+==============================================================================
+C09 | Quais viagens de rodovia saem pela manhã e fazem exatamente 2 paradas?
+Itens da checklist: FIND, ALL, SIZE, SORT
+==============================================================================
+{
+  _id: 'T0011',
+  origem: { cidade: 'Recife' },
+  destino: { cidade: 'Caruaru' },
+  paradas: [ 'Jaboatão dos Guararapes', 'Vitória de Santo Antão' ],
+  data_hora: ISODate('2026-09-14T09:45:00.000Z'),
+  status: 'concluida',
+  tags: [ 'rodovia', 'intermunicipal', 'manha' ]
+}
+{
+  _id: 'T0035',
+  origem: { cidade: 'Caruaru' },
+  destino: { cidade: 'Recife' },
+  paradas: [ 'Vitória de Santo Antão', 'Jaboatão dos Guararapes' ],
+  data_hora: ISODate('2026-10-19T14:30:00.000Z'),
+  status: 'concluida',
+  tags: [ 'rodovia', 'intermunicipal', 'manha' ]
+}
+{
+  _id: 'T0036',
+  origem: { cidade: 'Caruaru' },
+  destino: { cidade: 'Recife' },
+  paradas: [ 'Vitória de Santo Antão', 'Jaboatão dos Guararapes' ],
+  data_hora: ISODate('2026-10-19T14:30:00.000Z'),
+  status: 'concluida',
+  tags: [ 'rodovia', 'intermunicipal', 'manha' ]
+}
+{
+  _id: 'T0059',
+  origem: { cidade: 'Olinda' },
+  destino: { cidade: 'Caruaru' },
+  paradas: [ 'Recife', 'Vitória de Santo Antão' ],
+  data_hora: ISODate('2026-11-08T14:15:00.000Z'),
+  status: 'concluida',
+  tags: [ 'rodovia', 'intermunicipal', 'manha', 'fim de semana' ]
+}
+{
+  _id: 'T0061',
+  origem: { cidade: 'Olinda' },
+  destino: { cidade: 'Caruaru' },
+  paradas: [ 'Recife', 'Vitória de Santo Antão' ],
+  data_hora: ISODate('2026-11-09T09:30:00.000Z'),
+  status: 'concluida',
+  tags: [ 'rodovia', 'intermunicipal', 'manha' ]
+}
+{
+  _id: 'T0063',
+  origem: { cidade: 'Camaragibe' },
+  destino: { cidade: 'Caruaru' },
+  paradas: [ 'Vitória de Santo Antão', 'Gravatá' ],
+  data_hora: ISODate('2026-11-12T10:30:00.000Z'),
+  status: 'agendada',
+  tags: [ 'rodovia', 'intermunicipal', 'manha' ]
+}
+... (2 documento(s) omitido(s) na listagem)
+Total retornado: 8
+
+==============================================================================
+C10 | Quais foram as 3 viagens concluídas mais recentes da motorista U001? O índice composto ajuda?
+Itens da checklist: FIND, SORT, LIMIT, COUNTDOCUMENTS
+==============================================================================
+{
+  _id: 'T0052',
+  origem: { cidade: 'Recife' },
+  destino: { cidade: 'Gravatá' },
+  data_hora: ISODate('2026-11-01T19:45:00.000Z'),
+  co2_economizado_kg: 10.2
+}
+{
+  _id: 'T0028',
+  origem: { cidade: 'Olinda' },
+  destino: { cidade: 'Recife' },
+  data_hora: ISODate('2026-10-05T23:15:00.000Z'),
+  co2_economizado_kg: 2.88
+}
+{
+  _id: 'T0014',
+  origem: { cidade: 'Recife' },
+  destino: { cidade: 'Caruaru' },
+  data_hora: ISODate('2026-09-15T21:45:00.000Z'),
+  co2_economizado_kg: 48.6
+}
+Total retornado: 3
+Viagens concluídas da U001 no total: 4
+Plano com motorista_id + status (prefixo completo): FETCH <- IXSCAN (idx_motorista_status)
+Plano só com motorista_id (prefixo parcial):        FETCH <- IXSCAN (idx_motorista_status)
+Plano só com status (fora do prefixo):              COLLSCAN

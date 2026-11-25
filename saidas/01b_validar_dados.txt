@@ -1,0 +1,45 @@
+== Volumes ==
+[OK]    usuarios >= 40 (41)
+[OK]    cerca de 15 motoristas (15)
+[OK]    veiculos >= 18 (18)
+[OK]    pelo menos 4 elétricos ou híbridos (5)
+[OK]    viagens >= 80 (80)
+[OK]    cerca de 60 concluídas, 12 agendadas e 8 canceladas (60/12/8)
+[OK]    viagens concluídas espalhadas por 3 meses (2026-09, 2026-10, 2026-11)
+[OK]    avaliacoes >= 120 (120)
+== Campos opcionais ==
+[OK]    cnh_verificada só existe em motoristas
+[OK]    eletrico só existe em elétricos e híbridos
+[OK]    algum passageiro usa cupom
+== Regras de negócio ==
+[OK]    co2 = distancia x 0,12 x confirmados
+[OK]    co2 nunca negativo
+[OK]    valor_pago = preço (confirmado) e 0 (cancelado)
+[OK]    exatamente 2 exceções propositais de lotação (T0016,T0048)
+[OK]    vagas_ofertadas <= capacidade - 1
+[OK]    veículo da viagem pertence ao motorista
+[OK]    motorista nunca é passageiro da própria viagem
+[OK]    sem passageiro repetido na mesma viagem
+[OK]    viagens canceladas não têm confirmados
+[OK]    toda viagem concluída tem ao menos 1 confirmado
+[OK]    todo motorista também viajou como passageiro
+[OK]    origens, destinos e endereços nas cidades previstas
+[OK]    ninguém em duas viagens com menos de 4 h entre as saídas
+== Avaliações ==
+[OK]    só viagens concluídas têm avaliações
+[OK]    avaliador e avaliado participaram da viagem como confirmados
+[OK]    notas entre 1 e 5
+[OK]    notas concentradas entre 3 e 5 (>= 80%) (105/120)
+[OK]    existem notas 1 e 2 (15 notas baixas)
+[OK]    notas 1 e 2 têm comentário negativo
+[OK]    data da avaliação é posterior à viagem
+[OK]    nenhuma avaliação depois da data de referência
+[OK]    comentário sobre carro elétrico ou híbrido só em viagem com veículo verde
+[OK]    comentário citando a BR-232 só em rota de ou para Caruaru e Gravatá
+[OK]    comentário sobre paradas só em rota com paradas
+[OK]    concordância de gênero do comentário com a pessoa avaliada
+[OK]    comentários variados (>= 50 textos distintos) (89 distintos)
+[OK]    sem avaliação duplicada (mesma viagem, avaliador e avaliado)
+
+Verificações: 38, falhas: 0
+Todas as regras do seed foram respeitadas.

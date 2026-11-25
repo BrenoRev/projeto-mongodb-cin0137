@@ -1,0 +1,5 @@
+test> 
+test> switched to db caronas_sustentaveis
+caronas_sustentaveis> caronas_sustentaveis
+caronas_sustentaveis> [ 'avaliacoes', 'usuarios', 'veiculos', 'viagens' ]
+caronas_sustentaveis> 

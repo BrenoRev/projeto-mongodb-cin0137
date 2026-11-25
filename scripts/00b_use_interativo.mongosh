@@ -1,0 +1,4 @@
+// S01 (USE): sessão interativa pela entrada padrão; o use não roda em --file
+use caronas_sustentaveis
+db.getName()
+db.getCollectionNames().sort()

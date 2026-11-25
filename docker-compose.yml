@@ -1,0 +1,22 @@
+# Ambiente do projeto AV6 MongoDB (Plataforma de Caronas Sustentáveis).
+# MongoDB 7 com JavaScript no servidor habilitado (padrão da imagem oficial),
+# necessário para $where, mapReduce e $function.
+services:
+  mongo:
+    image: mongo:7
+    container_name: mongo-caronas
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./scripts:/scripts:ro
+      - ./tools:/tools:ro
+      - caronas_dados:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+
+volumes:
+  caronas_dados:

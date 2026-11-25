@@ -1,0 +1,6 @@
+.DS_Store
+__pycache__/
+
+docs/
+tools/montar_documento.py
+tools/estilo_docx.py
